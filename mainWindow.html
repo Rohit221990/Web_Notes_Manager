@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<meta http-equiv="Content-Security-Policy" content="script-src 'unsafe-inline' 'unsafe-eval' serve://dist/">
+<head>
+    <title>Manage Website</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+</head>
+<body>
+    <nav>
+        <div class="nav-wrapper">
+            <a class="brand-logo center">Web Manage</a>
+        </div>
+    </nav>
+    <ul></ul>    
+    <script>
+        const electron = require('electron');
+        const {ipcRenderer} = electron;
+        const ul = document.querySelector('ul');
+        const shell = require('electron').shell;
+
+        //catch item
+        ipcRenderer.on('item:add', function(e, item){
+            ul.className = 'collection';
+            const li = document.createElement('li');
+            li.className = 'collection-item';
+            const itemText = document.createTextNode(item);
+            li.appendChild(itemText);
+            ul.appendChild(li);
+        });
+
+        //clear item
+        ipcRenderer.on('item:clear', function(){
+            ul.innerHTML = '';
+            ul.className = '';            
+        });
+
+        ul.addEventListener('dblclick', openInBrowser);
+
+        function openInBrowser(e){
+            shell.openExternal(e.target.textContent);
+        }
+
+        if(ul.children.length == 0){
+            ul.className = '';
+        }
+
+    </script>
+</body>
+</html>
