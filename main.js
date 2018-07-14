@@ -3,6 +3,7 @@ const url = require("url");
 const path = require("path");
 
 const {app, BrowserWindow, Menu, ipcMain} = electron;  
+const containerGrid = require("./container-grid.js");
 
 // Process.env
 
@@ -14,6 +15,7 @@ let addWindow;
 //listen for app to be ready
 
 app.on('ready', function(){
+	debugger;
     //crate a new window
     mainWindow = new BrowserWindow({});
 
@@ -43,7 +45,6 @@ function createAddWindow(){
     addWindow = new BrowserWindow({
         width: 400,
         height: 200, 
-        frame: false,
         title: "add website address URL"
 
     });
@@ -62,10 +63,11 @@ function createAddWindow(){
 
 
 //catch item:add
-ipcMain.on('item:add', function(e, item){
-    mainWindow.webContents.send('item:add',item);
-    addWindow.close();
-})
+// ipcMain.on('item:add', function(e, item){
+//     //mainWindow.webContents.onAddRow(item);
+//     //mainWindow.webContents.send('item:add',item);
+//     addWindow.close();
+// })
 
 // Create Menu template
 const mainMenTemplate = [
@@ -99,18 +101,32 @@ if(process.platform == 'darwin'){
     mainMenTemplate.unshift()
 }
 
-if(process.env.Node_ENV !== 'production'){
-    mainMenTemplate.push({
-        label : 'Developer Tools',
-        submenu:[{
-            label: 'Toggle DevTools',
-            accelerator: process.platform ==  'drawin'? 'Command+Q': 'Ctrl+Q',
-            click(item, focusedWindow){
-                focusedWindow.toggleDevTools();
-            } 
-        },{
-            role: 'reload'
-        }
-        ]
-    });
-}
+mainMenTemplate.push({
+    label : 'Developer Tools',
+    submenu:[{
+        label: 'Toggle DevTools',
+        accelerator: process.platform ==  'drawin'? 'Command+Q': 'Ctrl+Q',
+        click(item, focusedWindow){
+            focusedWindow.toggleDevTools();
+        } 
+    },{
+        role: 'reload'
+    }
+    ]
+});
+
+// if(process.env.Node_ENV !== 'production'){
+//     mainMenTemplate.push({
+//         label : 'Developer Tools',
+//         submenu:[{
+//             label: 'Toggle DevTools',
+//             accelerator: process.platform ==  'drawin'? 'Command+Q': 'Ctrl+Q',
+//             click(item, focusedWindow){
+//                 focusedWindow.toggleDevTools();
+//             } 
+//         },{
+//             role: 'reload'
+//         }
+//         ]
+//     });
+// }
