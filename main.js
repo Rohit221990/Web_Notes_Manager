@@ -15,7 +15,6 @@ let addWindow;
 //listen for app to be ready
 
 app.on('ready', function(){
-	debugger;
     //crate a new window
     mainWindow = new BrowserWindow({});
 
